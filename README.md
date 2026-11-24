@@ -18,14 +18,21 @@ The app isn't on the App Store, so you install it yourself (iOS 17 or later):
 
 ## What it does
 
-- **Opens straight to the player**, full screen with no Safari bars. A loading screen with the icon shows until the player is ready.
-- **Feels like an app:** no text selection, long-press menus, link previews or pinch zoom.
-- **Videos play in the page**, with fullscreen, rotation to landscape, AirPlay and Picture in Picture.
-- **Leave the app mid-video** and it keeps playing in Picture in Picture (when iOS allows it for that video).
-- **Screen stays on** while a video plays, then sleeps normally once it stops.
-- **Lock screen and Control Center** show what's playing, with play/pause. Sound keeps going with the screen locked and the silent switch on.
-- **Links that leave the site** (YouTube, IMVDb) open in Safari or their app.
+The site's player, rebuilt as a native app: just the video on top, and the app's own controls underneath. The site's banners, popups, counters and chat are hidden.
+
+- **Now Playing:** the song, artist and channel under the picture.
+- **Remote:** previous, play/pause and next, plus Save, Share, Skip (for a video that won't play) and Full. Every press has a haptic click.
+- **Channels:** every channel on the site, grouped like the site (curated collections, regional, directors, labels...), with a filter.
+- **Time Machine:** pick a decade, then a year from 1975 to 2025, or "Surprise me".
+- **Search:** 113,000+ videos by artist or song.
+- **Saved:** the site's "Your Saved Videos" list: play one, play all, swipe to remove.
+- **Gestures:** swipe the picture left or right for next or previous, tap to pause, double-tap for full screen.
+- **Landscape:** turn the phone for a full-screen TV; tap for a floating remote.
+- **Picture in Picture** when you leave the app mid-video, **lock screen** controls, and sound that keeps going with the screen locked and the silent switch on.
+- **Screen stays on** while a video plays.
 - **No connection?** A "No connection" screen with **Retry**, and it reconnects by itself once you're online.
+
+The app drives the site's own player and lists, so new channels on the site show up in the app by themselves.
 
 ## Building
 

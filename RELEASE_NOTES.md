@@ -1,12 +1,12 @@
-## I Want My MTV 1.0
+## I Want My MTV 1.1
 
-**First build:** wantmymtv.org as a full-screen app that opens straight to the player.
+**A native app, not a web page**
+- **Just the video:** the site's banners, popups, counters and chat are gone.
+- **Now Playing** card with the song, artist and channel.
+- **Remote:** previous, play/pause, next, Save, Share, Skip and Full, with haptic clicks.
+- **Channels**, **Time Machine** (decade and year), **Search** and **Saved** as native sheets.
+- **Gestures:** swipe the picture for next/previous, tap to pause, double-tap for full screen.
+- **Landscape** full-screen TV with a floating remote.
+- **About** screen with credits and tips.
 
-- **Loading screen:** the icon on black with a spinner until the player is ready.
-- **No web giveaways:** no text selection, long-press menus, link previews, pinch zoom or grey tap flashes.
-- **Videos in the page**, with fullscreen, landscape and AirPlay.
-- **Picture in Picture** when you leave the app with a video playing.
-- **Sound keeps going** with the screen locked and the silent switch on.
-- **Screen stays on** while a video plays.
-- **Lock screen and Control Center** show what's playing.
-- **Offline screen:** "No connection" with a Retry button; it reconnects by itself when you're online.
+Still here from 1.0: Picture in Picture, background sound, lock screen controls, and the offline screen.

@@ -3,7 +3,7 @@ import UIKit
 import WebKit
 
 struct WebView: UIViewRepresentable {
-    let state: PageState
+    let state: PlayerController
 
     func makeCoordinator() -> Coordinator {
         Coordinator(state: state)
@@ -28,12 +28,17 @@ struct WebView: UIViewRepresentable {
         controller.addUserScript(
             WKUserScript(source: AppScripts.noZoom, injectionTime: .atDocumentStart, forMainFrameOnly: true)
         )
+        // The site turned into just the picture, with the app's API on window.__app.
+        controller.addUserScript(
+            WKUserScript(source: AppScripts.main, injectionTime: .atDocumentEnd, forMainFrameOnly: true)
+        )
         controller.add(context.coordinator, name: AppScripts.mediaHandler)
+        controller.add(context.coordinator, name: AppScripts.stateHandler)
 
         let webView = WKWebView(frame: .zero, configuration: configuration)
         webView.navigationDelegate = context.coordinator
         webView.uiDelegate = context.coordinator
-        webView.allowsBackForwardNavigationGestures = true
+        webView.allowsBackForwardNavigationGestures = false
         // No peek-and-pop link previews: feels like an app, not a browser.
         webView.allowsLinkPreview = false
         // Transparent until the page paints, so black shows instead of white.
@@ -49,7 +54,7 @@ struct WebView: UIViewRepresentable {
 
         context.coordinator.webView = webView
         state.webView = webView
-        webView.load(URLRequest(url: state.homeURL))
+        webView.load(URLRequest(url: PlayerController.homeURL))
         return webView
     }
 
@@ -57,18 +62,19 @@ struct WebView: UIViewRepresentable {
 
     static func dismantleUIView(_ webView: WKWebView, coordinator: Coordinator) {
         webView.configuration.userContentController.removeScriptMessageHandler(forName: AppScripts.mediaHandler)
+        webView.configuration.userContentController.removeScriptMessageHandler(forName: AppScripts.stateHandler)
     }
 
     @MainActor
     final class Coordinator: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMessageHandler {
-        let state: PageState
+        let state: PlayerController
         weak var webView: WKWebView?
         /// The page or embedded player whose video is playing, for Picture in Picture.
         private var playingFrame: WKFrameInfo?
         private var inPiP = false
         private var observers: [NSObjectProtocol] = []
 
-        init(state: PageState) {
+        init(state: PlayerController) {
             self.state = state
             super.init()
             let center = NotificationCenter.default
@@ -92,6 +98,10 @@ struct WebView: UIViewRepresentable {
             _ userContentController: WKUserContentController,
             didReceive message: WKScriptMessage
         ) {
+            if message.name == AppScripts.stateHandler {
+                state.receive(message.body)
+                return
+            }
             guard let body = message.body as? [String: Any], let playing = body["playing"] as? Bool else { return }
             if playing {
                 playingFrame = message.frameInfo
@@ -180,8 +190,9 @@ struct WebView: UIViewRepresentable {
         func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
             webView.scrollView.pinchGestureRecognizer?.isEnabled = false
             state.offline = false
-            // Give the player a moment to draw before the loading screen fades.
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) { [weak self] in
+            // The loading screen fades once the first video reports in, or after a few
+            // seconds at most (a video that needs a tap to start, say).
+            DispatchQueue.main.asyncAfter(deadline: .now() + 6) { [weak self] in
                 MainActor.assumeIsolated { self?.state.loaded = true }
             }
         }
