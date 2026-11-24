@@ -96,7 +96,7 @@ struct ChannelsSheet: View {
                     Text(channel.name)
                         .font(Theme.label(15, weight: .bold))
                         .foregroundStyle(on ? Theme.pink : Theme.text)
-                    if channel.count > 0 {
+                    if channel.count >= 1 {
                         Text("\(channel.count.formatted()) videos")
                             .font(Theme.label(12))
                             .foregroundStyle(Theme.dim)
