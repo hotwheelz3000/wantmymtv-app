@@ -1,4 +1,4 @@
-## I Want My MTV 1.1
+## MTV Rewind 1.1
 
 **A native app, not a web page**
 - **Just the video:** the site's banners, popups, counters and chat are gone.
@@ -23,4 +23,5 @@ Still here from 1.0: Picture in Picture, background sound, lock screen controls,
 - New wordmark lettering and an icon redrawn in the same colors.
 
 **New title**
+- The app is now called **MTV Rewind** on your home screen and in the app.
 - The title is now lavender with a brown 3D extrusion in heavy, condensed, slanted capitals, like an old VHS title card.

@@ -10,7 +10,7 @@ enum AppScripts {
     /// - Tells the app when a video starts or stops, so the screen stays on while
     ///   one plays.
     /// - Lock screen / Control Center: if the site doesn't name what's playing,
-    ///   names it I Want My MTV (with the video's title when it has one).
+    ///   names it MTV Rewind (with the video's title when it has one).
     /// - `window.__mtvPiP(true)` puts the playing video in Picture in Picture,
     ///   `window.__mtvPiP(false)` brings it back. The app calls these when you
     ///   leave and come back.
@@ -71,11 +71,11 @@ enum AppScripts {
             if (!title && window.top !== window) {
               title = (document.title || '').replace(/\s*-\s*YouTube\s*$/, '').trim();
             }
-            title = title || 'I Want My MTV';
+            title = title || 'MTV Rewind';
             if (ourMetadata && ourMetadata.title === title) return;
             ourMetadata = new MediaMetadata({
               title: title,
-              artist: 'I Want My MTV',
+              artist: 'MTV Rewind',
               album: 'Music videos, 24/7'
             });
             session.metadata = ourMetadata;

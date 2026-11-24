@@ -1,4 +1,4 @@
 /* Text shown in the app. Add a line here, build, and use it as L10n.<camelCaseKey>. */
 "offline_title" = "No connection";
-"offline_message" = "I Want My MTV needs the internet to play videos.\nIt'll try again when you're back online.";
+"offline_message" = "MTV Rewind needs the internet to play videos.\nIt'll try again when you're back online.";
 "retry" = "Retry";

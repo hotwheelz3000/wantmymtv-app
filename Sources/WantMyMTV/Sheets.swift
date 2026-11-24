@@ -360,7 +360,7 @@ struct AboutView: View {
                         .font(Theme.label(13))
                         .foregroundStyle(Theme.dim)
                     Text(
-                        "An unofficial app for wantmymtv.org: 113,000+ music videos, 24/7, no ads. "
+                        "An unofficial app for MTV Rewind (wantmymtv.org): 113,000+ music videos, 24/7, no ads. "
                             + "Every channel, list and video comes from the site, and the videos play from YouTube. "
                             + "Video info by IMVDb."
                     )

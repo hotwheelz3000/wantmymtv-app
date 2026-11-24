@@ -161,16 +161,16 @@ extension View {
     }
 }
 
-/// The app name in the VHS title style: "I WANT MY MTV" over "REWIND".
+/// The app name in the VHS title style: "MTV" over "REWIND".
 struct Wordmark: View {
     var size: CGFloat = 22
     var alignment: HorizontalAlignment = .center
 
     var body: some View {
         VStack(alignment: alignment, spacing: -size * 0.12) {
-            Text("I WANT MY MTV")
-                .font(Theme.title(size * 0.62))
-                .tracking(1)
+            Text("MTV")
+                .font(Theme.title(size * 0.8))
+                .tracking(2)
                 .vhsTitle(depth: max(2, Int(size / 10)))
             Text("REWIND")
                 .font(Theme.title(size * 1.15))
@@ -180,6 +180,6 @@ struct Wordmark: View {
         .padding(.trailing, size / 5)
         .padding(.bottom, size / 5)
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("I Want My MTV")
+        .accessibilityLabel("MTV Rewind")
     }
 }

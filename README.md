@@ -1,12 +1,12 @@
-# I Want My MTV (Unofficial)
+# MTV Rewind (Unofficial)
 
-An unofficial iPhone and iPad app for [I Want My MTV](https://wantmymtv.org/), the 24/7 music video stream. It's the same site you'd open in Safari, as a real app on your home screen.
+An unofficial iPhone and iPad app for [MTV Rewind](https://wantmymtv.org/) (wantmymtv.org), the 24/7 music video stream. It's the same site you'd open in Safari, as a real app on your home screen.
 
 > **Unofficial fan project.** Not affiliated with, endorsed by or connected to wantmymtv.org, MTV or Paramount. The app shows the official site; all videos belong to their owners and play from YouTube. No ads, accounts or tracking.
 
 ## Download
 
-**[Download I Want My MTV](https://github.com/hotwheelz3000/wantmymtv-app/releases/latest)**: open the link, then tap the `.ipa` file under **Assets** (named with the version, e.g. `WantMyMTV-1.0.ipa`; later builds of a version add a build number, e.g. `WantMyMTV-1.0-2.ipa`).
+**[Download MTV Rewind](https://github.com/hotwheelz3000/wantmymtv-app/releases/latest)**: open the link, then tap the `.ipa` file under **Assets** (named with the version, e.g. `WantMyMTV-1.0.ipa`; later builds of a version add a build number, e.g. `WantMyMTV-1.0-2.ipa`).
 
 ## How to install
 
