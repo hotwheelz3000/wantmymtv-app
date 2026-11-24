@@ -3,18 +3,17 @@
 import PackageDescription
 
 let package = Package(
-    name: "MyApp",
+    name: "WantMyMTV",
     defaultLocalization: "en",
     platforms: [
         .iOS(.v17),
-        .macOS(.v14),
     ],
     products: [
         // An xtool project should contain exactly one library product,
         // representing the main app.
         .library(
-            name: "MyApp",
-            targets: ["MyApp"]
+            name: "WantMyMTV",
+            targets: ["WantMyMTV"]
         ),
     ],
     dependencies: [
@@ -24,10 +23,12 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "MyApp",
+            name: "WantMyMTV",
             exclude: ["swiftgen.yml"],
             resources: [
                 .process("Resources"),
+                // The icon on the loading screen.
+                .copy("LaunchIcon.png"),
             ],
             plugins: [
                 .plugin(name: "SwiftGenPlugin", package: "SwiftGenPlugin"),

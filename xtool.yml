@@ -1,9 +1,11 @@
 version: 1
-bundleID: com.example.MyApp
+bundleID: com.hotwheelz3000.wantmymtv
 # The SwiftPM product used as the app. Also names the built .app/.ipa.
 # Change it with ./rename-app.sh rather than by hand.
-product: MyApp
+product: WantMyMTV
 # Merged into the generated Info.plist. CFBundleShortVersionString here is the
 # app's version (change it by hand for a new version); the Build IPA workflow
 # sets CFBundleVersion to the build number automatically.
-infoPath: MyApp-Info.plist
+infoPath: WantMyMTV-Info.plist
+# 1024x1024 opaque PNG, drawn by scripts/make-app-icon.py.
+iconPath: Resources/AppIcon.png

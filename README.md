@@ -1,90 +1,46 @@
-# iOS app template (xtool)
+# I Want My MTV (Unofficial)
 
-A starting point for SwiftUI iOS apps built with [xtool](https://xtool.sh): SwiftPM instead of an Xcode project, and a GitHub Actions workflow that builds an unsigned `.ipa` on every push to `main` and publishes it as the `latest` release.
+An unofficial iPhone and iPad app for [I Want My MTV](https://wantmymtv.org/), the 24/7 music video stream. It's the same site you'd open in Safari, as a real app on your home screen.
 
-What's here:
+> **Unofficial fan project.** Not affiliated with, endorsed by or connected to wantmymtv.org, MTV or Paramount. The app shows the official site; all videos belong to their owners and play from YouTube. No ads, accounts or tracking.
 
-- `Package.swift`, `xtool.yml`, `Sources/MyApp/`: a placeholder "Hello, world!" SwiftUI app, so the template builds as-is.
-- `MyApp-Info.plist`: the app's shown name and version.
-- `rename-app.sh`: renames the placeholder to your app.
-- `.github/workflows/build-ipa.yml`: lints, builds the `.ipa` on macOS, and publishes it.
-- `Sources/MyApp/swiftgen.yml`, `Sources/MyApp/Resources/`: typed Swift for the app's text (below).
-- `.swiftlint.yml`, `.swift-format`: lint and style rules used by the workflow.
-- `RELEASE_NOTES.md`: shown on the release page and in `source.json`.
-- `.claude/skills/using-xtool/`: a Claude Code skill with xtool reference notes.
+## Download
 
-## Start a new app
+**[Download I Want My MTV](https://github.com/hotwheelz3000/wantmymtv-app/releases/latest)**: open the link, then tap the `.ipa` file under **Assets** (named with the version, e.g. `WantMyMTV-1.0.ipa`; later builds of a version add a build number, e.g. `WantMyMTV-1.0-2.ipa`).
 
-1. On GitHub, click **Use this template → Create a new repository** (or clone this repo and push it to a new one).
-2. Clone your new repo and rename the app (below).
-3. Commit and push to `main`. The workflow builds your IPA.
+## How to install
 
-## Rename the app
+The app isn't on the App Store, so you install it yourself (iOS 17 or later):
 
-```bash
-./rename-app.sh CoffeeLog com.yourname.CoffeeLog
-```
+1. **Download the `.ipa`** from the link above.
+2. **Install it** with [Sideloadly](https://sideloadly.io), [AltStore](https://altstore.io) or a signing service such as Signulous.
+3. **Trust it:** Settings → General → VPN & Device Management → your Apple ID → **Trust**.
 
-The first argument is the app name. It becomes a Swift module and type name, so use letters, digits and `_` only (no spaces or hyphens). The second is the bundle ID.
+## What it does
 
-The script updates the names in `Package.swift`, sets `product:`, `bundleID:` and `infoPath:` in `xtool.yml`, renames `Sources/MyApp/` and `MyAppApp.swift`, renames the `MyAppApp` struct, and renames `MyApp-Info.plist` (and the shown name inside it). To show a name with spaces on the home screen, edit `CFBundleDisplayName` in the plist afterwards.
+- **Opens straight to the player**, full screen with no Safari bars. A loading screen with the icon shows until the player is ready.
+- **Feels like an app:** no text selection, long-press menus, link previews or pinch zoom.
+- **Videos play in the page**, with fullscreen, rotation to landscape, AirPlay and Picture in Picture.
+- **Leave the app mid-video** and it keeps playing in Picture in Picture (when iOS allows it for that video).
+- **Screen stays on** while a video plays, then sleeps normally once it stops.
+- **Lock screen and Control Center** show what's playing, with play/pause. Sound keeps going with the screen locked and the silent switch on.
+- **Links that leave the site** (YouTube, IMVDb) open in Safari or their app.
+- **No connection?** A "No connection" screen with **Retry**, and it reconnects by itself once you're online.
 
-## Versions and build numbers
+## Building
 
-- **Version:** `CFBundleShortVersionString` in `<AppName>-Info.plist`. Change it by hand for a new version.
-- **Build number:** set by the workflow. It counts the builds of the current version: the first build of a new version is 1, then 2, 3... It goes into `CFBundleVersion` and the app's `BuildInfo.label` ("Version 1.0 (build 3)").
-- **File name:** `MyApp-1.0.ipa` for the first build of a version, then `MyApp-1.0-2.ipa`, `MyApp-1.0-3.ipa`.
+Every push to `main` builds an unsigned IPA with [xtool](https://xtool.sh) on GitHub Actions and publishes it as the `latest` release. The icon is an original design drawn by `scripts/make-app-icon.py`.
 
-## Download the IPA
+## Updates
 
-Every push to `main` replaces the `latest` release. The direct link is:
+- **Update feed:** each release also has `source.json`, an AltStore-format source. Add this URL in a sideloading app that supports sources to see new builds as updates:
 
 ```
-https://github.com/<owner>/<repo>/releases/download/latest/<AppName>-<version>-<build>.ipa
-```
-
-The release notes and the end of the workflow log show the exact link. Builds run by hand (**Actions → Build IPA → Run workflow**) and builds of other branches don't publish a release; download those from the run page under **Artifacts**.
-
-The IPA is **unsigned**. Sign it when installing, for example with Signulous, Sideloadly or AltStore, or `xtool install` after `xtool auth login`.
-
-## Source feed (source.json)
-
-Each release also has `source.json`, an AltStore-format source listing the latest build:
-
-```
-https://github.com/<owner>/<repo>/releases/download/latest/source.json
-```
-
-Add that URL in a sideloading app that supports sources, and it shows new builds as updates. It only works for public repos.
-
-## Lint
-
-The workflow runs SwiftLint (rules in `.swiftlint.yml`) and swift-format before building. SwiftLint errors (`force_try`, `force_cast`) stop the run; warnings and style notes show up on the run page.
-
-## App text (SwiftGen)
-
-Put the app's text in `Sources/<AppName>/Resources/en.lproj/Localizable.strings`:
-
-```
-"save_button" = "Save";
-```
-
-Build, and use it as `Text(L10n.saveButton)`. A typo in a key is a compile error instead of blank text. Settings are in `Sources/<AppName>/swiftgen.yml`.
-
-## Build speed
-
-The workflow caches Homebrew downloads and SwiftPM's `.build` folder, so later builds only recompile what changed. A new Xcode version on GitHub's runners starts a fresh cache.
-
-## Build locally
-
-With xtool installed ([macOS](https://xtool.sh/documentation/xtooldocs/installation-macos), [Linux/Windows](https://xtool.sh/documentation/xtooldocs/installation-linux)):
-
-```bash
-xtool dev build --ipa   # unsigned IPA at xtool/<AppName>.ipa
-xtool dev               # build, sign and run on a connected device
+https://github.com/hotwheelz3000/wantmymtv-app/releases/download/latest/source.json
 ```
 
 ## Checks before each build
 
+- **Lint:** SwiftLint and swift-format run before the build.
 - **JavaScript check:** `scripts/check-js.py` runs `node --check` on every script held in a Swift multi-line string. A syntax error stops the build and points at the Swift file and line.
 - **Dependabot:** `.github/dependabot.yml` opens a pull request each week when the build's GitHub Actions have updates. Merge it to update.
