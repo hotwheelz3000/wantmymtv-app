@@ -1,0 +1,14 @@
+# Run by SwiftGenPlugin on every build (see Package.swift). It lives in the
+# target folder, so paths here are relative to Sources/<App>/ and follow
+# ./rename-app.sh. The generated file never lands in the repo.
+input_dir: Resources
+output_dir: ${DERIVED_SOURCES_DIR}
+
+strings:
+  inputs: en.lproj/Localizable.strings
+  outputs:
+    templateName: structured-swift5
+    output: Strings.swift
+    params:
+      enumName: L10n
+      bundle: Bundle.module

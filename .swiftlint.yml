@@ -1,0 +1,28 @@
+# SwiftLint settings for the Build IPA workflow. Warnings show up as notes on
+# the run page; errors stop the build before it starts.
+included:
+  - Sources
+excluded:
+  - .build
+  - xtool
+disabled_rules:
+  - line_length
+  - identifier_name
+  - type_name
+  - trailing_comma
+  - todo
+  # Size and complexity limits: big files (like injected JS) are fine here.
+  - file_length
+  - type_body_length
+  - function_body_length
+  - cyclomatic_complexity
+  - large_tuple
+  - function_parameter_count
+  - nesting
+opt_in_rules:
+  - force_unwrapping
+  - unused_optional_binding
+  - empty_count
+force_unwrapping: warning
+force_cast: error
+force_try: error

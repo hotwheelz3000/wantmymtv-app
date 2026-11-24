@@ -1,0 +1,2 @@
+/* Text shown in the app. Add a line here, build, and use it as L10n.<camelCaseKey>. */
+"hello_world" = "Hello, world!";

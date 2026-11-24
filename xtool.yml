@@ -1,0 +1,9 @@
+version: 1
+bundleID: com.example.MyApp
+# The SwiftPM product used as the app. Also names the built .app/.ipa.
+# Change it with ./rename-app.sh rather than by hand.
+product: MyApp
+# Merged into the generated Info.plist. CFBundleShortVersionString here is the
+# app's version (change it by hand for a new version); the Build IPA workflow
+# sets CFBundleVersion to the build number automatically.
+infoPath: MyApp-Info.plist
