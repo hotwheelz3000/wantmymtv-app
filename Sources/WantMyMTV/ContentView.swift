@@ -76,7 +76,7 @@ struct ContentView: View {
 
     private var header: some View {
         HStack {
-            Wordmark(size: 24)
+            Wordmark(size: 24, alignment: .leading)
             Spacer()
             Button {
                 Haptics.click()

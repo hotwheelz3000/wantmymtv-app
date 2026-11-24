@@ -21,3 +21,6 @@ Still here from 1.0: Picture in Picture, background sound, lock screen controls,
 - The site's MTV Rewind palette on black: royal blue panels, mustard, red, salmon, lilac and light blue, with chunky dark outlines.
 - The play button looks like the site's Enter button: a pink-to-blue gradient with a yellow ring.
 - New wordmark lettering and an icon redrawn in the same colors.
+
+**New title**
+- The title is now lavender with a brown 3D extrusion in heavy, condensed, slanted capitals, like an old VHS title card.

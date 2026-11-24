@@ -122,24 +122,63 @@ extension View {
     }
 }
 
-/// The app name: "I WANT MY" in lilac, "MTV" in mustard and red, "REWIND" in
-/// salmon and light blue like the site's logo. Lettering only, not the logo.
+/// The VHS "REWIND" title colors: lavender letters with a dark brown 3D extrusion.
+extension Theme {
+    static let titleFace = Color(hex: 0xA99CDA)
+    static let titleExtrude = Color(hex: 0x3A2A22)
+
+    /// Heavy, condensed, slightly slanted capitals, like the old VHS title.
+    static func title(_ size: CGFloat) -> Font {
+        .system(size: size, weight: .black).width(.condensed).italic()
+    }
+}
+
+/// Lavender lettering with a stepped brown extrusion down and to the right, and a
+/// thin dark outline. Lettering only, not a logo.
+struct VHSTitle: ViewModifier {
+    var depth: Int = 4
+
+    func body(content: Content) -> some View {
+        ZStack {
+            ForEach((1...max(depth, 1)).reversed(), id: \.self) { step in
+                content
+                    .foregroundStyle(step == depth ? Theme.ink : Theme.titleExtrude)
+                    .offset(x: CGFloat(step), y: CGFloat(step))
+            }
+            content
+                .foregroundStyle(Theme.titleFace)
+                .shadow(color: Theme.ink, radius: 0, x: 0.8, y: 0.8)
+                .shadow(color: Theme.ink, radius: 0, x: -0.8, y: -0.8)
+                .shadow(color: Theme.ink, radius: 0, x: 0.8, y: -0.8)
+                .shadow(color: Theme.ink, radius: 0, x: -0.8, y: 0.8)
+        }
+    }
+}
+
+extension View {
+    func vhsTitle(depth: Int = 4) -> some View {
+        modifier(VHSTitle(depth: depth))
+    }
+}
+
+/// The app name in the VHS title style: "I WANT MY MTV" over "REWIND".
 struct Wordmark: View {
     var size: CGFloat = 22
+    var alignment: HorizontalAlignment = .center
 
     var body: some View {
-        HStack(alignment: .firstTextBaseline, spacing: 7) {
-            Text("I WANT MY")
-                .font(Theme.display(size * 0.62))
-                .foregroundStyle(Theme.lilac)
-                .outlined(1, drop: 1.5)
-            (Text("M").foregroundStyle(Theme.yellow) + Text("TV").foregroundStyle(Theme.red))
-                .font(Theme.display(size))
-                .outlined(1.5, drop: 2.5)
-            (Text("RE").foregroundStyle(Theme.salmon) + Text("WIND").foregroundStyle(Theme.lightBlue))
-                .font(Theme.display(size * 0.62))
-                .outlined(1, drop: 1.5)
+        VStack(alignment: alignment, spacing: -size * 0.12) {
+            Text("I WANT MY MTV")
+                .font(Theme.title(size * 0.62))
+                .tracking(1)
+                .vhsTitle(depth: max(2, Int(size / 10)))
+            Text("REWIND")
+                .font(Theme.title(size * 1.15))
+                .tracking(1.5)
+                .vhsTitle(depth: max(3, Int(size / 6)))
         }
+        .padding(.trailing, size / 5)
+        .padding(.bottom, size / 5)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("I Want My MTV")
     }
