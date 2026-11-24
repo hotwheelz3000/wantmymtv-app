@@ -1,17 +1,44 @@
 import SwiftUI
 import UIKit
 
-/// Colors and type for the whole app: black, with the icon's neon pink, cyan and yellow.
+extension Color {
+    /// A color from a hex number, e.g. `Color(hex: 0x2F5EB0)`.
+    init(hex: UInt32) {
+        self.init(
+            red: Double((hex >> 16) & 0xFF) / 255,
+            green: Double((hex >> 8) & 0xFF) / 255,
+            blue: Double(hex & 0xFF) / 255
+        )
+    }
+}
+
+/// Colors and type for the whole app: a black background with the site's
+/// MTV Rewind palette (royal blue, lilac, mustard, red, salmon, light blue, and the
+/// Enter button's pink-to-blue gradient), with chunky dark outlines.
 enum Theme {
     static let background = Color.black
-    static let panel = Color(red: 0.075, green: 0.067, blue: 0.11)
-    static let panelHigh = Color(red: 0.13, green: 0.115, blue: 0.18)
-    static let stroke = Color.white.opacity(0.08)
-    static let pink = Color(red: 1.0, green: 0.18, blue: 0.58)
-    static let cyan = Color(red: 0.17, green: 0.91, blue: 1.0)
-    static let yellow = Color(red: 1.0, green: 0.88, blue: 0.23)
-    static let text = Color(red: 0.96, green: 0.94, blue: 0.91)
-    static let dim = Color(red: 0.96, green: 0.94, blue: 0.91).opacity(0.55)
+    static let royal = Color(hex: 0x2F5EB0)
+    static let deep = Color(hex: 0x224C8B)
+    static let navy = Color(hex: 0x10254D)
+    static let lilac = Color(hex: 0xD1A1D2)
+    static let yellow = Color(hex: 0xF4B940)
+    static let red = Color(hex: 0xC72E20)
+    static let salmon = Color(hex: 0xEE8887)
+    static let lightBlue = Color(hex: 0xADC9EB)
+    static let pink = Color(hex: 0xE471BF)
+    static let purple = Color(hex: 0x7D78D9)
+    static let sky = Color(hex: 0x69B0EF)
+    static let ink = Color(hex: 0x141420)
+
+    /// The Enter button: pink to purple to sky blue.
+    static let enter = LinearGradient(colors: [pink, purple, sky], startPoint: .leading, endPoint: .trailing)
+
+    static let panel = navy
+    static let panelHigh = deep
+    static let stroke = ink
+    static let cyan = sky
+    static let text = Color(hex: 0xF6F2EA)
+    static let dim = Color(hex: 0xF6F2EA).opacity(0.6)
 
     static func display(_ size: CGFloat) -> Font {
         .system(size: size, weight: .black, design: .rounded)
@@ -74,23 +101,44 @@ struct Scanlines: View {
     }
 }
 
-/// The app name as a neon sign: "I WANT MY" over "MTV REWIND".
+/// Chunky cartoon lettering: a dark outline and a drop shadow, like the site's logo.
+struct Outlined: ViewModifier {
+    var width: CGFloat = 1.5
+    var drop: CGFloat = 2.5
+
+    func body(content: Content) -> some View {
+        content
+            .shadow(color: Theme.ink, radius: 0, x: width, y: width)
+            .shadow(color: Theme.ink, radius: 0, x: -width, y: -width)
+            .shadow(color: Theme.ink, radius: 0, x: width, y: -width)
+            .shadow(color: Theme.ink, radius: 0, x: -width, y: width)
+            .shadow(color: Theme.ink.opacity(0.9), radius: 0, x: drop, y: drop)
+    }
+}
+
+extension View {
+    func outlined(_ width: CGFloat = 1.5, drop: CGFloat = 2.5) -> some View {
+        modifier(Outlined(width: width, drop: drop))
+    }
+}
+
+/// The app name: "I WANT MY" in lilac, "MTV" in mustard and red, "REWIND" in
+/// salmon and light blue like the site's logo. Lettering only, not the logo.
 struct Wordmark: View {
     var size: CGFloat = 22
 
     var body: some View {
-        HStack(spacing: 8) {
+        HStack(alignment: .firstTextBaseline, spacing: 7) {
             Text("I WANT MY")
                 .font(Theme.display(size * 0.62))
-                .foregroundStyle(Theme.text)
-            Text("MTV")
+                .foregroundStyle(Theme.lilac)
+                .outlined(1, drop: 1.5)
+            (Text("M").foregroundStyle(Theme.yellow) + Text("TV").foregroundStyle(Theme.red))
                 .font(Theme.display(size))
-                .foregroundStyle(Theme.pink)
-                .shadow(color: Theme.pink.opacity(0.8), radius: 8)
-            Text("REWIND")
+                .outlined(1.5, drop: 2.5)
+            (Text("RE").foregroundStyle(Theme.salmon) + Text("WIND").foregroundStyle(Theme.lightBlue))
                 .font(Theme.display(size * 0.62))
-                .foregroundStyle(Theme.cyan)
-                .shadow(color: Theme.cyan.opacity(0.7), radius: 6)
+                .outlined(1, drop: 1.5)
         }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("I Want My MTV")

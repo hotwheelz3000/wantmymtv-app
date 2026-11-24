@@ -11,7 +11,7 @@ private struct SheetFrame<Content: View>: View {
         NavigationStack {
             content
                 .scrollContentBackground(.hidden)
-                .background(Theme.panel.ignoresSafeArea())
+                .background(Theme.background.ignoresSafeArea())
                 .navigationTitle(title)
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
@@ -24,7 +24,7 @@ private struct SheetFrame<Content: View>: View {
         }
         .presentationDetents(detents)
         .presentationDragIndicator(.visible)
-        .presentationBackground(Theme.panel)
+        .presentationBackground(Theme.background)
         .preferredColorScheme(.dark)
     }
 }
@@ -69,9 +69,9 @@ struct ChannelsSheet: View {
                             } header: {
                                 Text(section.name)
                                     .font(Theme.led(12))
-                                    .foregroundStyle(Theme.cyan)
+                                    .foregroundStyle(Theme.yellow)
                             }
-                            .listRowBackground(Color.white.opacity(0.04))
+                            .listRowBackground(Theme.navy)
                         }
                     }
                     .listStyle(.insetGrouped)
@@ -154,7 +154,11 @@ struct TimeMachineSheet: View {
                                         .frame(maxWidth: .infinity, minHeight: 52)
                                         .background(
                                             RoundedRectangle(cornerRadius: 12, style: .continuous)
-                                                .fill(Color.black.opacity(0.5))
+                                                .fill(Theme.navy)
+                                                .overlay(
+                                                    RoundedRectangle(cornerRadius: 12, style: .continuous)
+                                                        .strokeBorder(Theme.royal.opacity(0.6), lineWidth: 1)
+                                                )
                                         )
                                 }
                                 .buttonStyle(PressableStyle())
@@ -169,9 +173,13 @@ struct TimeMachineSheet: View {
                         } label: {
                             Label("Surprise me from the \(decadeName(decade))", systemImage: "shuffle")
                                 .font(Theme.label(15, weight: .bold))
-                                .foregroundStyle(Color.black)
+                                .foregroundStyle(Theme.ink)
                                 .frame(maxWidth: .infinity, minHeight: 50)
                                 .background(Theme.yellow, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 14, style: .continuous)
+                                        .strokeBorder(Theme.ink, lineWidth: 2)
+                                )
                         }
                         .buttonStyle(PressableStyle())
                     } else if years == nil {
@@ -202,11 +210,11 @@ struct TimeMachineSheet: View {
                     } label: {
                         Text(decadeName(d))
                             .font(Theme.label(15, weight: .heavy))
-                            .foregroundStyle(on ? Color.black : Theme.dim)
+                            .foregroundStyle(on ? Theme.ink : Theme.dim)
                             .padding(.horizontal, 16)
                             .frame(minHeight: 38)
                             .background(
-                                Capsule().fill(on ? Theme.yellow : Color.white.opacity(0.06))
+                                Capsule().fill(on ? Theme.yellow : Theme.navy)
                                     .shadow(color: on ? Theme.yellow.opacity(0.6) : .clear, radius: 8)
                             )
                     }
@@ -245,10 +253,10 @@ struct SearchSheet: View {
                                 .foregroundStyle(Theme.text)
                             Text(track.artist)
                                 .font(Theme.label(13))
-                                .foregroundStyle(Theme.pink)
+                                .foregroundStyle(Theme.salmon)
                         }
                     }
-                    .listRowBackground(Color.white.opacity(0.04))
+                    .listRowBackground(Theme.navy)
                 }
             }
             .listStyle(.plain)
@@ -298,7 +306,7 @@ struct SavedSheet: View {
                                     .font(Theme.label(15, weight: .bold))
                                     .foregroundStyle(Theme.pink)
                             }
-                            .listRowBackground(Color.white.opacity(0.04))
+                            .listRowBackground(Theme.navy)
                         }
                         Section {
                             ForEach(Array(videos.enumerated()), id: \.offset) { index, video in
@@ -316,7 +324,7 @@ struct SavedSheet: View {
                                             .foregroundStyle(Theme.text)
                                     }
                                 }
-                                .listRowBackground(Color.white.opacity(0.04))
+                                .listRowBackground(Theme.navy)
                             }
                             .onDelete { offsets in
                                 for index in offsets.sorted(by: >) { player.removeSaved(at: index) }
@@ -387,7 +395,7 @@ struct AboutView: View {
                 .font(Theme.label(15, weight: .bold))
                 .foregroundStyle(Theme.text)
                 .frame(maxWidth: .infinity, minHeight: 48)
-                .background(Color.white.opacity(0.07), in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+                .background(Theme.navy, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
         }
     }
 

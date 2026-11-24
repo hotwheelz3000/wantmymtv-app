@@ -167,12 +167,12 @@ private struct NowPlayingCard: View {
             Button(action: { Haptics.click(); onChannel() }) {
                 HStack(spacing: 6) {
                     Circle()
-                        .fill(player.now.playing ? Theme.pink : Theme.dim)
+                        .fill(player.now.playing ? Theme.red : Theme.dim)
                         .frame(width: 7, height: 7)
-                        .shadow(color: Theme.pink, radius: player.now.playing ? 4 : 0)
+                        .shadow(color: Theme.red, radius: player.now.playing ? 4 : 0)
                     Text(channelLabel)
                         .font(Theme.led(12))
-                        .foregroundStyle(Theme.cyan)
+                        .foregroundStyle(Theme.yellow)
                         .lineLimit(1)
                     Image(systemName: "chevron.right")
                         .font(.system(size: 10, weight: .bold))
@@ -180,7 +180,7 @@ private struct NowPlayingCard: View {
                 }
                 .padding(.horizontal, 10)
                 .padding(.vertical, 6)
-                .background(Capsule().fill(Color.white.opacity(0.06)))
+                .background(Capsule().fill(Theme.navy).overlay(Capsule().strokeBorder(Theme.deep, lineWidth: 1)))
             }
             .buttonStyle(PressableStyle())
             .accessibilityLabel("Channel: \(channelLabel). Change channel")
@@ -188,12 +188,13 @@ private struct NowPlayingCard: View {
             Text(player.now.title.isEmpty ? "Tuning in…" : player.now.title)
                 .font(Theme.display(24))
                 .foregroundStyle(Theme.text)
+                .outlined(1, drop: 2)
                 .lineLimit(2)
                 .minimumScaleFactor(0.7)
                 .contentTransition(.opacity)
             Text(player.now.artist.isEmpty ? " " : player.now.artist)
-                .font(Theme.label(17, weight: .semibold))
-                .foregroundStyle(Theme.pink)
+                .font(Theme.label(17, weight: .bold))
+                .foregroundStyle(Theme.salmon)
                 .lineLimit(1)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -216,16 +217,16 @@ private struct Remote: View {
     var body: some View {
         VStack(spacing: 16) {
             HStack(spacing: 22) {
-                RoundButton(symbol: "backward.fill", size: 58, tint: Theme.panelHigh, label: "Previous") {
+                RoundButton(symbol: "backward.fill", size: 58, style: .light, label: "Previous") {
                     player.previous()
                 }
                 RoundButton(
                     symbol: player.now.playing ? "pause.fill" : "play.fill",
-                    size: 76, tint: Theme.pink, label: player.now.playing ? "Pause" : "Play"
+                    size: 76, style: .enter, label: player.now.playing ? "Pause" : "Play"
                 ) {
                     player.playPause()
                 }
-                RoundButton(symbol: "forward.fill", size: 58, tint: Theme.panelHigh, label: "Next") {
+                RoundButton(symbol: "forward.fill", size: 58, style: .light, label: "Next") {
                     player.next()
                 }
             }
@@ -257,21 +258,21 @@ private struct Remote: View {
             }
 
             LazyVGrid(columns: [GridItem(.flexible(), spacing: 10), GridItem(.flexible(), spacing: 10)], spacing: 10) {
-                BigTile(symbol: "tv", title: "Channels", tint: Theme.cyan) { open(.channels) }
+                BigTile(symbol: "tv", title: "Channels", tint: Theme.sky) { open(.channels) }
                 BigTile(symbol: "clock.arrow.circlepath", title: "Time Machine", tint: Theme.yellow) {
                     open(.timeMachine)
                 }
                 BigTile(symbol: "magnifyingglass", title: "Search", tint: Theme.pink) { open(.search) }
-                BigTile(symbol: "heart.text.square", title: "Saved", tint: Theme.text) { open(.saved) }
+                BigTile(symbol: "heart.text.square", title: "Saved", tint: Theme.salmon) { open(.saved) }
             }
         }
         .padding(18)
         .background(
             RoundedRectangle(cornerRadius: 28, style: .continuous)
-                .fill(LinearGradient(colors: [Theme.panelHigh, Theme.panel], startPoint: .top, endPoint: .bottom))
+                .fill(LinearGradient(colors: [Theme.deep, Theme.navy], startPoint: .top, endPoint: .bottom))
                 .overlay(
                     RoundedRectangle(cornerRadius: 28, style: .continuous)
-                        .strokeBorder(Theme.stroke, lineWidth: 1)
+                        .strokeBorder(Theme.royal, lineWidth: 1.5)
                 )
         )
     }
@@ -294,19 +295,19 @@ private struct FloatingRemote: View {
 
     var body: some View {
         HStack(spacing: 18) {
-            RoundButton(symbol: "backward.fill", size: 50, tint: Theme.panelHigh, label: "Previous") {
+            RoundButton(symbol: "backward.fill", size: 50, style: .light, label: "Previous") {
                 player.previous()
             }
             RoundButton(
                 symbol: player.now.playing ? "pause.fill" : "play.fill",
-                size: 62, tint: Theme.pink, label: player.now.playing ? "Pause" : "Play"
+                size: 62, style: .enter, label: player.now.playing ? "Pause" : "Play"
             ) { player.playPause() }
-            RoundButton(symbol: "forward.fill", size: 50, tint: Theme.panelHigh, label: "Next") {
+            RoundButton(symbol: "forward.fill", size: 50, style: .light, label: "Next") {
                 player.next()
             }
             if canExit {
                 RoundButton(
-                    symbol: "arrow.down.right.and.arrow.up.left", size: 50, tint: Theme.panelHigh,
+                    symbol: "arrow.down.right.and.arrow.up.left", size: 50, style: .light,
                     label: "Exit full screen"
                 ) {
                     Haptics.click()
@@ -320,28 +321,44 @@ private struct FloatingRemote: View {
 }
 
 struct RoundButton: View {
+    enum Style { case enter, light }
+
     let symbol: String
     var size: CGFloat = 56
-    let tint: Color
+    var style: Style = .light
     let label: String
     let action: () -> Void
 
     var body: some View {
         Button(action: action) {
             Image(systemName: symbol)
-                .font(.system(size: size * 0.36, weight: .bold))
-                .foregroundStyle(Theme.text)
+                .font(.system(size: size * 0.36, weight: .heavy))
+                .foregroundStyle(style == .enter ? Theme.text : Theme.ink)
                 .contentTransition(.symbolEffect(.replace))
                 .frame(width: size, height: size)
-                .background(
-                    Circle()
-                        .fill(LinearGradient(colors: [tint, tint.opacity(0.7)], startPoint: .top, endPoint: .bottom))
-                        .overlay(Circle().strokeBorder(Color.white.opacity(0.18), lineWidth: 1))
-                        .shadow(color: tint == Theme.pink ? Theme.pink.opacity(0.5) : .black.opacity(0.5), radius: 8, y: 3)
-                )
+                .background(face)
         }
         .buttonStyle(PressableStyle(scale: 0.9))
         .accessibilityLabel(label)
+    }
+
+    /// Enter-button style (pink to blue, yellow ring) or light blue, both with a dark
+    /// outline and a hard drop shadow.
+    @ViewBuilder private var face: some View {
+        switch style {
+        case .enter:
+            Circle()
+                .fill(Theme.enter)
+                .overlay(Circle().strokeBorder(Theme.yellow, lineWidth: size * 0.07))
+                .overlay(Circle().strokeBorder(Theme.ink, lineWidth: 2))
+                .background(Circle().fill(Theme.purple).offset(y: 4))
+                .background(Circle().strokeBorder(Theme.ink, lineWidth: 2).offset(y: 4))
+        case .light:
+            Circle()
+                .fill(Theme.lightBlue)
+                .overlay(Circle().strokeBorder(Theme.ink, lineWidth: 2))
+                .background(Circle().fill(Theme.ink).offset(y: 3))
+        }
     }
 }
 
@@ -359,11 +376,15 @@ struct PillLabel: View {
                 .lineLimit(1)
                 .minimumScaleFactor(0.8)
         }
-        .foregroundStyle(highlighted ? Color.black : Theme.text)
+        .foregroundStyle(highlighted ? Theme.ink : Theme.text)
         .frame(maxWidth: .infinity, minHeight: 48)
         .background(
             RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .fill(highlighted ? Theme.pink : Color.white.opacity(0.07))
+                .fill(highlighted ? Theme.salmon : Theme.navy)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 14, style: .continuous)
+                        .strokeBorder(highlighted ? Theme.ink : Theme.royal.opacity(0.6), lineWidth: 1)
+                )
         )
     }
 }
@@ -394,7 +415,6 @@ private struct BigTile: View {
                 Image(systemName: symbol)
                     .font(.system(size: 18, weight: .semibold))
                     .foregroundStyle(tint)
-                    .shadow(color: tint.opacity(0.6), radius: 6)
                     .frame(width: 26)
                 Text(title)
                     .font(Theme.label(15, weight: .bold))
@@ -407,10 +427,10 @@ private struct BigTile: View {
             .frame(maxWidth: .infinity, minHeight: 56)
             .background(
                 RoundedRectangle(cornerRadius: 16, style: .continuous)
-                    .fill(Color.black.opacity(0.35))
+                    .fill(Theme.navy)
                     .overlay(
                         RoundedRectangle(cornerRadius: 16, style: .continuous)
-                            .strokeBorder(Theme.stroke, lineWidth: 1)
+                            .strokeBorder(Theme.royal.opacity(0.6), lineWidth: 1)
                     )
             )
         }
@@ -457,7 +477,8 @@ private struct OfflineView: View {
                         .font(.headline)
                         .padding(.horizontal, 36)
                         .padding(.vertical, 12)
-                        .background(Theme.pink, in: Capsule())
+                        .background(Theme.enter, in: Capsule())
+                        .overlay(Capsule().strokeBorder(Theme.yellow, lineWidth: 3))
                         .foregroundStyle(Color.white)
                 }
                 .padding(.top, 6)
