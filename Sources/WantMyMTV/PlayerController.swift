@@ -48,7 +48,9 @@ struct NowPlaying: Equatable, Decodable {
 @MainActor
 @Observable
 final class PlayerController {
-    static let homeURL = URL(string: "https://wantmymtv.org/player.html")!
+    /// tv=1 is the site's own TV mode (made for its Android TV app): YouTube's controls
+    /// and fullscreen button are off, popups are skipped, and it resumes the last channel.
+    static let homeURL = URL(string: "https://wantmymtv.org/player.html?tv=1")!
 
     /// True once the player has loaded for the first time.
     var loaded = false
@@ -150,6 +152,14 @@ final class PlayerController {
             "return await window.__app.search(q)", arguments: ["q": query], contentWorld: .page
         )
         return decodeValue(result) ?? []
+    }
+
+    /// After a rotation, Full, or coming back from Picture in Picture: the page re-fits
+    /// the video to the new size.
+    func relayout() {
+        webView?.evaluateJavaScript(
+            "window.scrollTo(0, 0); window.dispatchEvent(new Event('resize')); undefined", completionHandler: nil
+        )
     }
 
     var shareURL: URL? {

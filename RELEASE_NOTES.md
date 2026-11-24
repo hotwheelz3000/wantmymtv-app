@@ -10,3 +10,9 @@
 - **About** screen with credits and tips.
 
 Still here from 1.0: Picture in Picture, background sound, lock screen controls, and the offline screen.
+
+**Build fixes**
+- Buttons work again: iOS's fullscreen video window no longer sits on top of the app.
+- The video fills the screen after you turn the phone or tap Full.
+- Coming back to the app always brings the video back from Picture in Picture.
+- Uses the site's TV mode, so YouTube's own controls stay out of the picture.

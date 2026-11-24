@@ -18,6 +18,7 @@ struct ContentView: View {
             let landscape = geo.size.width > geo.size.height
             let full = landscape || fullScreen
             ZStack {
+                Color.clear.onChange(of: geo.size) { player.relayout() }
                 Theme.background.ignoresSafeArea()
 
                 VStack(spacing: 0) {
@@ -57,6 +58,7 @@ struct ContentView: View {
                 }
             }
         }
+        .onChange(of: fullScreen) { player.relayout() }
         .statusBarHidden(fullScreen)
         .persistentSystemOverlays(fullScreen ? .hidden : .automatic)
         .animation(.easeOut(duration: 0.35), value: player.loaded)

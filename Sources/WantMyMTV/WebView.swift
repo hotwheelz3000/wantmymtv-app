@@ -18,8 +18,9 @@ struct WebView: UIViewRepresentable {
         configuration.allowsAirPlayForMediaPlayback = true
         configuration.allowsPictureInPictureMediaPlayback = true
         configuration.websiteDataStore = .default()
-        // The page's own fullscreen button (the HTML Fullscreen API).
-        configuration.preferences.isElementFullscreenEnabled = true
+        // No web fullscreen: iOS's fullscreen video window sat on top of the app and
+        // took every tap. The app's Full button and landscape mode do the job instead.
+        configuration.preferences.isElementFullscreenEnabled = false
 
         let controller = configuration.userContentController
         controller.addUserScript(
@@ -51,6 +52,10 @@ struct WebView: UIViewRepresentable {
         webView.scrollView.alwaysBounceHorizontal = false
         webView.scrollView.showsHorizontalScrollIndicator = false
         webView.scrollView.pinchGestureRecognizer?.isEnabled = false
+        webView.scrollView.isScrollEnabled = false
+        // The page never gets touches: the app's own controls drive it, so YouTube's
+        // overlay and fullscreen button can't take over.
+        webView.isUserInteractionEnabled = false
 
         context.coordinator.webView = webView
         state.webView = webView
@@ -71,6 +76,9 @@ struct WebView: UIViewRepresentable {
         weak var webView: WKWebView?
         /// The page or embedded player whose video is playing, for Picture in Picture.
         private var playingFrame: WKFrameInfo?
+        /// The last frame that reported any video, playing or not, so a video iOS put in
+        /// Picture in Picture by itself can still be brought back.
+        private var mediaFrame: WKFrameInfo?
         private var inPiP = false
         private var observers: [NSObjectProtocol] = []
 
@@ -103,6 +111,7 @@ struct WebView: UIViewRepresentable {
                 return
             }
             guard let body = message.body as? [String: Any], let playing = body["playing"] as? Bool else { return }
+            mediaFrame = message.frameInfo
             if playing {
                 playingFrame = message.frameInfo
             } else if playingFrame?.securityOrigin.host == message.frameInfo.securityOrigin.host {
@@ -121,10 +130,15 @@ struct WebView: UIViewRepresentable {
             }
         }
 
+        /// Back in the app: always put the video back in the page, whatever started
+        /// Picture in Picture (the app, iOS or the player), then let the page re-fit it.
         private func exitPiP() {
-            guard inPiP, let webView, let frame = playingFrame else { inPiP = false; return }
             inPiP = false
-            webView.evaluateJavaScript("window.__mtvPiP && window.__mtvPiP(false)", in: frame, in: .page)
+            guard let webView else { return }
+            for frame in [playingFrame, mediaFrame].compactMap({ $0 }) {
+                webView.evaluateJavaScript("window.__mtvPiP && window.__mtvPiP(false)", in: frame, in: .page)
+            }
+            state.relayout()
         }
 
         // MARK: Navigation
@@ -210,6 +224,7 @@ struct WebView: UIViewRepresentable {
 
         func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
             playingFrame = nil
+            mediaFrame = nil
             UIApplication.shared.isIdleTimerDisabled = false
             webView.reload()
         }

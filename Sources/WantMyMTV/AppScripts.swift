@@ -19,6 +19,18 @@ enum AppScripts {
           if (window.__mtvLoaded) return;
           window.__mtvLoaded = true;
 
+          // No fullscreen from the page or YouTube: iOS's fullscreen video window covered
+          // the app. The app has its own Full button and landscape mode.
+          function blocked() { return Promise.reject(new Error('Fullscreen is handled by the app')); }
+          function noop() {}
+          try {
+            Element.prototype.requestFullscreen = blocked;
+            Element.prototype.webkitRequestFullscreen = noop;
+            Element.prototype.webkitRequestFullScreen = noop;
+            HTMLVideoElement.prototype.webkitEnterFullscreen = noop;
+            HTMLVideoElement.prototype.webkitEnterFullScreen = noop;
+          } catch (e) {}
+
           var css =
             '*{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;' +
             '-webkit-tap-highlight-color:transparent}' +
@@ -94,7 +106,7 @@ enum AppScripts {
               return true;
             }
             media().forEach(function (m) {
-              if (m.webkitPresentationMode === 'picture-in-picture') m.webkitSetPresentationMode('inline');
+              if (m.webkitPresentationMode && m.webkitPresentationMode !== 'inline') m.webkitSetPresentationMode('inline');
             });
             return true;
           };
@@ -153,7 +165,8 @@ enum AppScripts {
             '.player-stage,.container,.tv-col,.tv-frame,.tv-screen{transform:none!important;' +
             'filter:none!important;contain:none!important;perspective:none!important}' +
             '#player{visibility:visible!important;position:fixed!important;top:0!important;left:0!important;' +
-            'width:100vw!important;height:100vh!important;max-width:none!important;max-height:none!important;' +
+            'right:0!important;bottom:0!important;width:100%!important;height:100%!important;' +
+            'max-width:none!important;max-height:none!important;' +
             'margin:0!important;border:0!important;border-radius:0!important;z-index:2147483647!important}';
           var style = document.createElement('style');
           style.textContent = css;
