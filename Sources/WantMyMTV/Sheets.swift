@@ -10,6 +10,7 @@ private struct SheetFrame<Content: View>: View {
     var body: some View {
         NavigationStack {
             content
+                .environment(\.defaultMinListRowHeight, 52)
                 .scrollContentBackground(.hidden)
                 .background(Theme.background.ignoresSafeArea())
                 .navigationTitle(title)
@@ -24,6 +25,7 @@ private struct SheetFrame<Content: View>: View {
         }
         .presentationDetents(detents)
         .presentationDragIndicator(.visible)
+        .presentationCornerRadius(Metrics.cardRadius + 4)
         .presentationBackground(Theme.background)
         .preferredColorScheme(.dark)
     }
@@ -34,17 +36,22 @@ private struct Placeholder: View {
     let text: String
 
     var body: some View {
-        VStack(spacing: 10) {
+        VStack(spacing: Metrics.md) {
             Image(systemName: symbol)
-                .font(.system(size: 30, weight: .semibold))
+                .font(.system(size: 26, weight: .semibold))
                 .foregroundStyle(Theme.dim)
+                .frame(width: 64, height: 64)
+                .background(Circle().fill(Theme.navy))
+                .overlay(Circle().strokeBorder(Theme.royal.opacity(0.5), lineWidth: 1))
             Text(text)
                 .font(Theme.label(15))
                 .foregroundStyle(Theme.dim)
                 .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
         }
+        .frame(maxWidth: 300)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .padding(32)
+        .padding(Metrics.xl)
     }
 }
 
@@ -67,9 +74,11 @@ struct ChannelsSheet: View {
                                     row(channel)
                                 }
                             } header: {
-                                Text(section.name)
-                                    .font(Theme.led(12))
+                                Text(section.name.uppercased())
+                                    .font(Theme.led(11))
+                                    .tracking(0.6)
                                     .foregroundStyle(Theme.yellow)
+                                    .padding(.top, Metrics.sm)
                             }
                             .listRowBackground(Theme.navy)
                         }

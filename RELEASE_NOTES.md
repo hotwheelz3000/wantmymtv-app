@@ -25,3 +25,9 @@ Still here from 1.0: Picture in Picture, background sound, lock screen controls,
 **New title**
 - The app is now called **MTV Rewind** on your home screen and in the app.
 - The title is now lavender with a brown 3D extrusion in heavy, condensed, slanted capitals, like an old VHS title card.
+
+**Polish**
+- Cleaner layout on an even spacing grid; the video sits in a rounded card.
+- Clearer Now Playing with a smooth change between songs and placeholders while loading.
+- Even, larger buttons and tiles, softer press animations, tidier sheets and loading screen.
+- Better VoiceOver labels and support for larger text.
